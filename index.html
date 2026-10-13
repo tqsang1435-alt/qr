@@ -3,11 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Trang xem ảnh trực tuyến nhanh và mượt mà.">
-  <title>Xem Ảnh</title>
+  <title>Bộ sưu tập ảnh</title>
 
-  <!-- Preload tất cả 3 ảnh để chuyển đổi tức thì không bị giật lag -->
+  <!-- Preload tất cả 3 ảnh để chuyển đổi tức thì không bị trễ -->
   <link rel="preload" as="image" href="./images/1791898231072_3171001516605911240_3171001516605911240_7f66056724889276ea3441aaa06b3900.jpg">
   <link rel="preload" as="image" href="./images/1791898563701_3171001516605911240_3171001516605911240_a0c685435ddda7ef3c9cce7b7dd8e2e4.jpg">
   <link rel="preload" as="image" href="./images/1791898566249_3171001516605911240_3171001516605911240_fa0b303c51eea026926571c112e0c1de.jpg">
@@ -24,10 +26,10 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: #0a0a0a;
+      background-color: #050505;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      touch-action: pan-y pinch-zoom;
+      overscroll-behavior: none;
       user-select: none;
       -webkit-user-select: none;
     }
@@ -54,6 +56,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: grab;
+    }
+
+    .slides-wrapper:active {
+      cursor: grabbing;
     }
 
     .slide {
@@ -64,7 +71,7 @@
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.35s ease;
       pointer-events: none;
       padding: 16px;
     }
@@ -81,30 +88,31 @@
       width: auto;
       height: auto;
       object-fit: contain;
-      border-radius: 4px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      border-radius: 6px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75);
       pointer-events: none;
       -webkit-user-drag: none;
+      transition: transform 0.35s ease;
     }
 
     /* Chỉ báo số thứ tự ảnh ở phía trên */
     .counter-badge {
       position: absolute;
-      top: max(18px, env(safe-area-inset-top) + 12px);
+      top: max(18px, env(safe-area-inset-top) + 14px);
       left: 50%;
       transform: translateX(-50%);
-      z-index: 20;
-      background: rgba(20, 20, 20, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      z-index: 30;
+      background: rgba(18, 18, 18, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      color: rgba(255, 255, 255, 0.9);
-      padding: 6px 16px;
-      border-radius: 24px;
+      color: rgba(255, 255, 255, 0.95);
+      padding: 6px 18px;
+      border-radius: 20px;
       font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
       pointer-events: none;
     }
 
@@ -113,40 +121,47 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 20;
+      z-index: 30;
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(24, 24, 24, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(20, 20, 20, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       outline: none;
-      transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      opacity: 0.9;
+      transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
     }
 
     .nav-btn:hover {
-      background: rgba(45, 45, 45, 0.85);
-      border-color: rgba(255, 255, 255, 0.3);
-      transform: translateY(-50%) scale(1.06);
+      opacity: 1;
+      background: rgba(40, 40, 40, 0.9);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-50%) scale(1.08);
     }
 
     .nav-btn:active {
-      transform: translateY(-50%) scale(0.94);
+      transform: translateY(-50%) scale(0.92);
+    }
+
+    .nav-btn:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
     }
 
     .nav-btn-prev {
-      left: max(14px, env(safe-area-inset-left) + 8px);
+      left: max(16px, env(safe-area-inset-left) + 10px);
     }
 
     .nav-btn-next {
-      right: max(14px, env(safe-area-inset-right) + 8px);
+      right: max(16px, env(safe-area-inset-right) + 10px);
     }
 
     .nav-btn svg {
@@ -162,20 +177,20 @@
     /* Thanh chỉ báo chấm (Dots) ở phía dưới */
     .dots-container {
       position: absolute;
-      bottom: max(22px, env(safe-area-inset-bottom) + 14px);
+      bottom: max(22px, env(safe-area-inset-bottom) + 16px);
       left: 50%;
       transform: translateX(-50%);
-      z-index: 20;
+      z-index: 30;
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(20, 20, 20, 0.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 8px 14px;
-      border-radius: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      background: rgba(18, 18, 18, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 16px;
+      border-radius: 24px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
     }
 
     .dot {
@@ -183,7 +198,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.35);
       border: none;
       cursor: pointer;
       outline: none;
@@ -191,24 +206,29 @@
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Tăng diện tích chạm (hit area) cho ngón tay trên điện thoại */
+    /* Tăng diện tích chạm (hit area) cho ngón tay trên điện thoại: min 44x44px */
     .dot::after {
       content: '';
       position: absolute;
-      top: -12px;
-      bottom: -12px;
-      left: -10px;
-      right: -10px;
+      top: -16px;
+      bottom: -16px;
+      left: -12px;
+      right: -12px;
     }
 
     .dot.active {
-      width: 22px;
+      width: 24px;
       border-radius: 6px;
       background: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
     }
 
-    /* Tối ưu cho thiết bị di động */
+    .dot:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    /* Tối ưu riêng cho màn hình điện thoại */
     @media (max-width: 600px) {
       .slide {
         padding: 8px;
@@ -217,7 +237,7 @@
       .nav-btn {
         width: 44px;
         height: 44px;
-        background: rgba(20, 20, 20, 0.5);
+        background: rgba(20, 20, 20, 0.55);
       }
 
       .nav-btn svg {
@@ -232,7 +252,7 @@
 
       .dots-container {
         gap: 8px;
-        padding: 6px 12px;
+        padding: 6px 14px;
       }
     }
   </style>
@@ -285,8 +305,8 @@
     </div>
 
     <!-- Chỉ báo 3 chấm -->
-    <nav class="dots-container" aria-label="Chọn ảnh">
-      <button class="dot active" data-target="0" aria-label="Xem ảnh 1"></button>
+    <nav class="dots-container" aria-label="Chọn ảnh nhanh">
+      <button class="dot active" data-target="0" aria-label="Xem ảnh 1" aria-current="true"></button>
       <button class="dot" data-target="1" aria-label="Xem ảnh 2"></button>
       <button class="dot" data-target="2" aria-label="Xem ảnh 3"></button>
     </nav>
@@ -309,9 +329,9 @@
 
       let currentIndex = 0;
 
-      // Hàm chuyển tới ảnh thứ index
+      // Hàm chuyển đổi ảnh mượt mà
       function goToSlide(index) {
-        // Hỗ trợ vòng lặp (looping)
+        // Vòng lặp tuần hoàn (looping)
         if (index < 0) {
           currentIndex = totalSlides - 1;
         } else if (index >= totalSlides) {
@@ -329,7 +349,7 @@
           }
         });
 
-        // Cập nhật dots
+        // Cập nhật các chấm chỉ báo (dots)
         dots.forEach((dot, i) => {
           if (i === currentIndex) {
             dot.classList.add('active');
@@ -352,7 +372,7 @@
         goToSlide(currentIndex - 1);
       }
 
-      // 1. Sự kiện bấm nút Next / Prev
+      // 1. Nhấn nút Next / Prev
       btnNext.addEventListener('click', (e) => {
         e.stopPropagation();
         nextSlide();
@@ -363,7 +383,7 @@
         prevSlide();
       });
 
-      // 2. Sự kiện bấm vào các chấm (dots)
+      // 2. Nhấn vào các chấm chỉ báo (dots)
       dots.forEach((dot) => {
         dot.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -372,7 +392,7 @@
         });
       });
 
-      // 3. Sự kiện điều khiển bằng bàn phím (mũi tên trái / phải)
+      // 3. Điều khiển bằng bàn phím (mũi tên trái / phải và phím số 1, 2, 3)
       window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'Right') {
           nextSlide();
@@ -387,12 +407,13 @@
         }
       });
 
-      // 4. Xử lý thao tác vuốt (Swipe) trên màn hình cảm ứng điện thoại
+      // 4. Thao tác vuốt cảm ứng (Swipe) trên điện thoại
       let touchStartX = 0;
       let touchStartY = 0;
       let touchEndX = 0;
       let touchEndY = 0;
-      const minSwipeDistance = 45; // Ngưỡng pixel để kích hoạt vuốt
+      let isSwiping = false;
+      const minSwipeDistance = 40; // Ngưỡng pixel kích hoạt vuốt
 
       viewer.addEventListener('touchstart', (e) => {
         if (e.touches.length === 1) {
@@ -400,22 +421,28 @@
           touchStartY = e.touches[0].clientY;
           touchEndX = touchStartX;
           touchEndY = touchStartY;
+          isSwiping = true;
         }
       }, { passive: true });
 
       viewer.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1) {
+        if (isSwiping && e.touches.length === 1) {
           touchEndX = e.touches[0].clientX;
           touchEndY = e.touches[0].clientY;
         }
       }, { passive: true });
 
       viewer.addEventListener('touchend', () => {
+        if (!isSwiping) return;
+        isSwiping = false;
+
         const deltaX = touchEndX - touchStartX;
         const deltaY = touchEndY - touchStartY;
+        const absX = Math.abs(deltaX);
+        const absY = Math.abs(deltaY);
 
-        // Chỉ nhận diện thao tác vuốt ngang khi khoảng cách di chuyển ngang lớn hơn dọc
-        if (Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+        // Kích hoạt khi di chuyển ngang đủ xa và hướng chủ đạo là nằm ngang
+        if (absX > minSwipeDistance && absX > absY * 1.2) {
           if (deltaX < 0) {
             // Vuốt sang trái -> Ảnh tiếp theo
             nextSlide();
@@ -425,6 +452,31 @@
           }
         }
       }, { passive: true });
+
+      // 5. Thao tác kéo chuột (Mouse drag) trên máy tính
+      let mouseStartX = 0;
+      let isMouseDown = false;
+
+      viewer.addEventListener('mousedown', (e) => {
+        // Chỉ nhận diện chuột trái và bỏ qua nếu click trực tiếp lên nút/chấm
+        if (e.button === 0 && !e.target.closest('button')) {
+          isMouseDown = true;
+          mouseStartX = e.clientX;
+        }
+      });
+
+      window.addEventListener('mouseup', (e) => {
+        if (!isMouseDown) return;
+        isMouseDown = false;
+        const deltaX = e.clientX - mouseStartX;
+        if (Math.abs(deltaX) > 50) {
+          if (deltaX < 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+      });
 
     })();
   </script>
